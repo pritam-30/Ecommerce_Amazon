@@ -1,34 +1,7 @@
-const product = [{
-  image : `images/products/athletic-cotton-socks-6-pairs.jpg`,
-  name : " Black and Gray Athletic Cotton Socks - 6 Pairs",
-  rating : {
-    stars : `images/ratings/rating-45.png`,
-    reviews : 87
-  },
-  product_price : 1090
-},
-{
-  image : `images/products/intermediate-composite-basketball.jpg`,
-  name : "Intermediate Size Basketball",
-  rating : {
-    stars : `images/ratings/rating-40.png`,
-    reviews : 127
-  },
-  product_price :  2095
-},
-{
-  image : `images/products/adults-plain-cotton-tshirt-2-pack-teal.jpg`,
-  name : " Adults Plain Cotton T-Shirt - 2 Pack",
-  rating : {
-    stars : `images/ratings/rating-45.png`,
-    reviews : 56
-  },
-  product_price :  799
-}];
 
 // Generate HTML for products
 let html = "";
-product.forEach((product) => {
+products.forEach((product) => {
   html += `<div class="product-container">
           <div class="product-image-container">
             <img class="product-image"
@@ -41,14 +14,14 @@ product.forEach((product) => {
 
           <div class="product-rating-container">
             <img class="product-rating-stars"
-              src="${product.rating.stars}">
+              src="images/ratings/rating-${product.rating.stars*10}.png">
             <div class="product-rating-count link-primary">
-              ${product.rating.reviews}
+              ${product.rating.count}
             </div>
           </div>
 
           <div class="product-price">
-            $${(product.product_price / 100).toFixed(2)}
+            $${(product.priceCents/ 100).toFixed(2)}
           </div>
 
           <div class="product-quantity-container">
