@@ -1,3 +1,5 @@
+import {cart} from './cart.js';
+import {products} from './products.js';
 
 // Generate HTML for products
 let html = "";
@@ -25,8 +27,8 @@ products.forEach((product) => {
           </div>
 
           <div class="product-quantity-container">
-            <select>
-              <option selected value="1">1</option>
+            <select class = "js-quantity-${product.id}">
+              <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
               <option value="4">4</option>
@@ -41,10 +43,9 @@ products.forEach((product) => {
 
           <div class="product-spacer"></div>
 
-          <div class="added-to-cart">
-            <img src="images/icons/checkmark.png">
-            Added
-          </div>
+          <div class="added-to-cart-${product.id}" style = "font-size : 16px ; margin-bottom : 10px ; height : 15px ; color : green ; 
+          display:flex; align-items:center; gap:3px" >
+           </div>
 
           <button class="add-to-cart-button button-primary js-add-to-cart"
           data-product-id ="${product.id}">
@@ -53,23 +54,55 @@ products.forEach((product) => {
         </div>`;
 });
 document.querySelector('.products-grid').innerHTML = html;
+
+let storage = 0;
+document.addEventListener('DOMContentLoaded', () => {
+  storage += JSON.parse(localStorage.getItem('cartQuantity'));
+  document.querySelector('.cart-quantity').textContent = storage;
+});
+
 document.querySelectorAll('.js-add-to-cart').forEach((button) => {
   button.addEventListener('click', () => {
     const ID = button.dataset.productId;
+    
+    let select = storage;
+    let totalQuantity = storage ; 
+    let NewValue = document.querySelector(`.js-quantity-${ID}`);
+    select = JSON.parse(NewValue.value);
+
     let matching;
     cart.forEach((item) => {
       if (item.id === ID) {
         matching = item;
       }});
       if (matching) {
-        matching.quantity += 1;
+        matching.quantity += select;
       }
+      // else, add new item to cart array with quantity 1
       else{ 
       cart.push({
         id: ID,
-        quantity:1
+        quantity: select
      })
-     }; // else, add new item to cart array with quantity 1
-     console.log(cart);
+     };
+
+    cart.forEach((item) => {
+      totalQuantity += item.quantity;
+      document.querySelector('.cart-quantity').textContent = totalQuantity;
+      localStorage.setItem('cartQuantity', JSON.stringify(totalQuantity));
+    });
+
+  let time = setTimeout(() => {
+    document.querySelector(`.added-to-cart-${ID}`).innerHTML = `<img src="images/icons/checkmark.png" width=18px>   Added`;
+    setTimeout(() => {
+      document.querySelector(`.added-to-cart-${ID}`).innerHTML = '';
+      clearTimeout(time);
+    },3000)
+    });
+ 
+
+   console.log(totalQuantity);
+   console.log(cart);
+
   });
 });
