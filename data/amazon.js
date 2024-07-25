@@ -1,4 +1,4 @@
-import {cart} from './cart.js';
+import { addItem} from './cart.js';
 import {products} from './products.js';
 
 // Generate HTML for products
@@ -55,54 +55,20 @@ products.forEach((product) => {
 });
 document.querySelector('.products-grid').innerHTML = html;
 
-let storage = 0;
-document.addEventListener('DOMContentLoaded', () => {
-  storage += JSON.parse(localStorage.getItem('cartQuantity'));
-  document.querySelector('.cart-quantity').textContent = storage;
-});
-
 document.querySelectorAll('.js-add-to-cart').forEach((button) => {
   button.addEventListener('click', () => {
-    const ID = button.dataset.productId;
-    
-    let select = storage;
-    let totalQuantity = storage ; 
-    let NewValue = document.querySelector(`.js-quantity-${ID}`);
-    select = JSON.parse(NewValue.value);
-
-    let matching;
-    cart.forEach((item) => {
-      if (item.id === ID) {
-        matching = item;
-      }});
-      if (matching) {
-        matching.quantity += select;
-      }
-      // else, add new item to cart array with quantity 1
-      else{ 
-      cart.push({
-        id: ID,
-        quantity: select
-     })
-     };
-
-    cart.forEach((item) => {
-      totalQuantity += item.quantity;
-      document.querySelector('.cart-quantity').textContent = totalQuantity;
-      localStorage.setItem('cartQuantity', JSON.stringify(totalQuantity));
-    });
-
-  let time = setTimeout(() => {
-    document.querySelector(`.added-to-cart-${ID}`).innerHTML = `<img src="images/icons/checkmark.png" width=18px>   Added`;
-    setTimeout(() => {
-      document.querySelector(`.added-to-cart-${ID}`).innerHTML = '';
-      clearTimeout(time);
-    },3000)
-    });
- 
-
-   console.log(totalQuantity);
-   console.log(cart);
-
-  });
+   const ID = button.dataset.productId;
+   addItem(ID);
+   setTime(ID);
 });
+});
+
+function setTime (ID) {
+  let time = setTimeout(() => {
+  document.querySelector(`.added-to-cart-${ID}`).innerHTML = `<img src="images/icons/checkmark.png" width=18px>   Added`;
+  setTimeout(() => {
+    document.querySelector(`.added-to-cart-${ID}`).innerHTML = '';
+    clearTimeout(time);
+  },3000)
+  });
+}
