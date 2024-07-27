@@ -1,5 +1,6 @@
-import { addItem} from './cart.js';
-import {products} from './products.js';
+import { addItem } from "./cart.js";
+//import {cartItems} from './checkout.js';
+import { products } from "./products.js";
 
 // Generate HTML for products
 let html = "";
@@ -16,14 +17,14 @@ products.forEach((product) => {
 
           <div class="product-rating-container">
             <img class="product-rating-stars"
-              src="images/ratings/rating-${product.rating.stars*10}.png">
+              src="images/ratings/rating-${product.rating.stars * 10}.png">
             <div class="product-rating-count link-primary">
               ${product.rating.count}
             </div>
           </div>
 
           <div class="product-price">
-            $${(product.priceCents/ 100).toFixed(2)}
+            $${(product.priceCents / 100).toFixed(2)}
           </div>
 
           <div class="product-quantity-container">
@@ -43,7 +44,9 @@ products.forEach((product) => {
 
           <div class="product-spacer"></div>
 
-          <div class="added-to-cart-${product.id}" style = "font-size : 16px ; margin-bottom : 10px ; height : 15px ; color : green ; 
+          <div class="added-to-cart-${
+            product.id
+          }" style = "font-size : 16px ; margin-bottom : 10px ; height : 15px ; color : green ; 
           display:flex; align-items:center; gap:3px" >
            </div>
 
@@ -53,22 +56,24 @@ products.forEach((product) => {
           </button>
         </div>`;
 });
-document.querySelector('.products-grid').innerHTML = html;
+document.querySelector(".products-grid").innerHTML = html;
 
-document.querySelectorAll('.js-add-to-cart').forEach((button) => {
-  button.addEventListener('click', () => {
-   const ID = button.dataset.productId;
-   addItem(ID);
-   setTime(ID);
-});
+document.querySelectorAll(".js-add-to-cart").forEach((button) => {
+  button.addEventListener("click", () => {
+    const ID = button.dataset.productId;
+    addItem(ID);
+    setTime(ID);
+  });
 });
 
-function setTime (ID) {
+function setTime(ID) {
   let time = setTimeout(() => {
-  document.querySelector(`.added-to-cart-${ID}`).innerHTML = `<img src="images/icons/checkmark.png" width=18px>   Added`;
-  setTimeout(() => {
-    document.querySelector(`.added-to-cart-${ID}`).innerHTML = '';
-    clearTimeout(time);
-  },3000)
+    document.querySelector(
+      `.added-to-cart-${ID}`
+    ).innerHTML = `<img src="images/icons/checkmark.png" width=18px>   Added`;
+    setTimeout(() => {
+      document.querySelector(`.added-to-cart-${ID}`).innerHTML = "";
+      clearTimeout(time);
+    }, 3000);
   });
 }
