@@ -1,33 +1,36 @@
-export let cart = [
-  {
-    id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
-    quantity: 0,
-  },
-  {
-    id: "15b6fc6f-327a-4ec4-896f-486349e85a3d",
-    quantity: 0,
-  },
-];
+// FIXME: Checking for null and errors in JSON.prase.
+let storedCart = localStorage.getItem("cart");
+let parsedCart;
 
-let storage = 0;
-document.addEventListener("DOMContentLoaded", () => {
-  // Ensure the element exists before trying to set its content
-  const cartQuantityElement = document.querySelector(".items-quantity");
-  if (cartQuantityElement) {
-    const storageItems = JSON.parse(localStorage.getItem("cartQuantity"));
-    if (storageItems) {
-      storage = storageItems; // Direct assignment instead of adding
-    }
-    cartQuantityElement.textContent = storage;
-  } else {
-    console.error("Element with class 'items-quantity' not found.");
-  }
-});
+try {
+  parsedCart = JSON.parse(storedCart);
+} catch (e) {
+  parsedCart = null;
+}
+// ! This is the cart where we are putting our item into from the localStorage.
+// ! And if we get null then we have the if condition to check for that.
+export let cart = parsedCart;
+if (!cart) {
+  cart = [
+    {
+      id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
+      quantity: 1,
+    },
+    {
+      id: "15b6fc6f-327a-4ec4-896f-486349e85a3d",
+      quantity: 2,
+    },
+  ];
+}
+
+function saveCart() {
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
+
 export function addItem(ID) {
   let select;
-  let totalQuantity = storage;
   let NewValue = document.querySelector(`.js-quantity-${ID}`);
-  select = JSON.parse(NewValue.value, 10);
+  select = parseInt(NewValue.value, 10);
 
   let matching;
   cart.forEach((item) => {
@@ -45,23 +48,100 @@ export function addItem(ID) {
       quantity: select,
     });
   }
-  updateQuantity(totalQuantity);
-  console.log(cart);
+  updateQuantity();
+  saveCart();
 }
-function updateQuantity(totalQuantity) {
+// TODO: create a variable Storage with the default value 0.
+// let Storage = 0;
+
+// TODO: On Reload the Function will be called.
+document.addEventListener("DOMContentLoaded", () => {
+  const Quantity = localStorage.getItem("quantity");
+  let saveQuantity;
+  // FIXME:  Checking for null and errors in JSON.prase.
+  try {
+    saveQuantity = JSON.parse(Quantity);
+  } catch (e) {
+    saveQuantity = null;
+  }
+  if (!saveQuantity) {
+    Storage = saveQuantity;
+    // TODO: Check if `.items-quantity` element exists before setting its `textContent`.
+    let itemsQuantityElement = document.querySelector(".items-quantity");
+    if (itemsQuantityElement) {
+      itemsQuantityElement.textContent = Storage;
+    }
+  }
+  // ! update the quantity on every reload.
+  updateQuantity();
+});
+
+export function updateQuantity() {
+  let totalQuantity = 0;
   cart.forEach((item) => {
     totalQuantity += item.quantity;
   });
-  document.querySelector(".items-quantity").textContent = totalQuantity;
-  localStorage.setItem("cartQuantity", JSON.stringify(totalQuantity));
+  //Storage = totalQuantity;
+  // TODO: Check if `.items-quantity` element exists before setting its `textContent`.
+  let itemsQuantityElement = document.querySelector(".items-quantity");
+  if (itemsQuantityElement) {
+    itemsQuantityElement.textContent = totalQuantity;
+  }
+  // TODO: Check if `.updateQuantity` element exists before setting its `textContent`.
+  let itemsQuantity = document.querySelector(".updateQuantity");
+  if (itemsQuantity) {
+    itemsQuantity.textContent = `${totalQuantity} items`;
+  }
+
+  // ! Saving the quantity to localStorage.
+  localStorage.setItem("quantity", JSON.stringify(totalQuantity));
   console.log(totalQuantity);
 }
+
 export function removeItem(productId) {
-  let newCart = [];
+  const newCart = [];
   cart.forEach((item) => {
     if (item.id !== productId) {
       newCart.push(item);
     }
   });
   cart = newCart;
+  saveCart();
+}
+
+export function cartQuantity(productId) {
+  //TODO: get the quantity entered in the input field.
+  let inputQuantity = document.querySelector(`.quantity${productId}`).value;
+  //TODO: Check if the quantity entered is a number. If not, set it to 0.
+  if (inputQuantity) {
+    inputQuantity = parseInt(inputQuantity, 10);
+  } else {
+    inputQuantity = 0;
+  }
+  //TODO: Check if the quantity entered is a positive number and less than 1000.
+  if (inputQuantity > 0 && inputQuantity < 1000) {
+    cart.forEach((item) => {
+      if (item.id === productId) {
+        item.quantity = inputQuantity;
+      }
+    });
+    //TODO: Get the element with class name '.itemQuantity' in a variable.
+    //TODO: Run the FOREACH loop to Iterate over each element.
+    //TODO: Check if the elementID is equal to the productID.
+    //TODO: If its equal make the element.textcontent equal to the InputQuantity.
+    let eleMent = document
+      .querySelectorAll(".itemQuantity")
+      .forEach((element) => {
+        if (element.dataset.productId === productId) {
+          element.textContent = inputQuantity;
+        }
+      });
+  }
+  //TODO: else show an alert message,
+  else {
+    alert("Please enter a valid quantity between 1 and 999");
+  }
+
+  updateQuantity();
+  saveCart();
 }

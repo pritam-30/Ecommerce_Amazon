@@ -170,9 +170,9 @@
 
 .payment-summary-row {
   display: grid;
-  /* 1fr auto; means the width of the 2nd column will be
-     determined by the elements inside the column (auto).
-     The 1st column will take up the remaining space. */
+  /* ! 1fr auto; means the width of the 2nd column will be
+     !determined by the elements inside the column (auto).
+     !The 1st column will take up the remaining space. */
   grid-template-columns: 1fr auto;
 
   font-size: 15px;
@@ -195,7 +195,6 @@
   color: rgb(177, 39, 4);
   font-weight: 700;
   font-size: 18px;
-
   border-top: 1px solid rgb(222, 222, 222);
   padding-top: 18px;
 }
@@ -205,7 +204,21 @@
   padding-top: 12px;
   padding-bottom: 12px;
   border-radius: 8px;
-
   margin-top: 11px;
   margin-bottom: 15px;
+}
+.enter-quantity {
+  width: 30px;
+  display: none;
+}
+.save-quantity {
+  display: none;
+}
+.is-editing-quantity .enter-quantity,
+.is-editing-quantity .save-quantity {
+  display: inline-block;
+}
+.is-editing-quantity .quantity-label,
+.is-editing-quantity .update-quantity-link {
+  display: none;
 }

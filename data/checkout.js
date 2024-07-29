@@ -1,4 +1,4 @@
-import { cart, removeItem } from "./cart.js";
+import { cart, removeItem, updateQuantity, cartQuantity } from "./cart.js";
 import { products } from "./products.js";
 
 let cartHTML = "";
@@ -33,10 +33,22 @@ cart.forEach((item) => {
      </div>
      <div class="product-quantity">
        <span>
-         Quantity: <span class="quantity-label">${item.quantity}</span>
+         Quantity: <span class="quantity-label itemQuantity" data-product-id ="${
+           matchingProduct.id
+         }" >${item.quantity}</span>
        </span>
-       <span class="update-quantity-link link-primary">
+       <span class="update-quantity-link link-primary" data-product-id="${
+         matchingProduct.id
+       }">
          Update
+       </span>
+       <input type="number" class="enter-quantity quantity${
+         matchingProduct.id
+       }" tabindex="0" data-product-id="${matchingProduct.id}">
+       <span class="save-quantity link-primary" data-product-id="${
+         matchingProduct.id
+       }" >
+         save
        </span>
        <span class="delete-quantity-link js-delete link-primary" data-product-id="${
          matchingProduct.id
@@ -102,5 +114,34 @@ document.querySelectorAll(".js-delete").forEach((link) => {
     removeItem(productId);
     const productToremove = document.querySelector(`.js-remove-${productId}`);
     productToremove.remove();
+    updateQuantity();
+  });
+});
+
+document.querySelectorAll(".update-quantity-link").forEach((link) => {
+  link.addEventListener("click", () => {
+    const productId = link.dataset.productId;
+    let Item = document.querySelector(`.js-remove-${productId}`);
+    Item.classList.add("is-editing-quantity");
+    console.log(Item);
+  });
+});
+
+document.querySelectorAll(".save-quantity").forEach((link) => {
+  link.addEventListener("click", () => {
+    const productId = link.dataset.productId;
+    let Item = document.querySelector(`.js-remove-${productId}`);
+    Item.classList.remove("is-editing-quantity");
+    cartQuantity(productId);
+  });
+});
+document.querySelectorAll(".enter-quantity").forEach((element) => {
+  element.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      const productId = element.dataset.productId;
+      let Item = document.querySelector(`.js-remove-${productId}`);
+      Item.classList.remove("is-editing-quantity");
+      cartQuantity(productId);
+    }
   });
 });
