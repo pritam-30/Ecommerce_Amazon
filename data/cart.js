@@ -148,3 +148,14 @@ export function cartQuantity(productId) {
   updateQuantity();
   saveCart();
 }
+//TODO: Update the cart
+export function updateDeliveryOptions(productId, deliveryId) {
+  let matchingProduct;
+  cart.forEach((item) => {
+    if (item.id === productId) {
+      matchingProduct = item;
+    }
+  });
+  matchingProduct.deliveryID = deliveryId;
+  saveCart();
+}
