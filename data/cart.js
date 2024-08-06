@@ -1,28 +1,32 @@
+export let cart;
+loadFromStorage();
 // FIXME: Checking for null and errors in JSON.prase.
-let storedCart = localStorage.getItem("cart");
-let parsedCart;
+export function loadFromStorage() {
+  let storedCart = localStorage.getItem("cart");
+  let parsedCart;
 
-try {
-  parsedCart = JSON.parse(storedCart);
-} catch (e) {
-  parsedCart = null;
-}
-// ! This is the cart where we are putting our item into from the localStorage.
-// ! And if we get null then we have the if condition to check for that.
-export let cart = parsedCart;
-if (!cart) {
-  cart = [
-    {
-      id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
-      quantity: 1,
-      deliveryID: "1",
-    },
-    {
-      id: "15b6fc6f-327a-4ec4-896f-486349e85a3d",
-      quantity: 2,
-      deliveryID: "2",
-    },
-  ];
+  try {
+    parsedCart = JSON.parse(storedCart);
+  } catch (e) {
+    parsedCart = null;
+  }
+  // ! This is the cart where we are putting our item into from the localStorage.
+  // ! And if we get null then we have the if condition to check for that.
+  cart = parsedCart;
+  if (!cart) {
+    cart = [
+      {
+        id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
+        quantity: 1,
+        deliveryID: "1",
+      },
+      {
+        id: "15b6fc6f-327a-4ec4-896f-486349e85a3d",
+        quantity: 2,
+        deliveryID: "2",
+      },
+    ];
+  }
 }
 
 function saveCart() {
@@ -54,8 +58,6 @@ export function addItem(ID) {
   updateQuantity();
   saveCart();
 }
-// TODO: create a variable Storage with the default value 0.
-// let Storage = 0;
 
 // TODO: On Reload the Function will be called.
 document.addEventListener("DOMContentLoaded", () => {
@@ -68,11 +70,10 @@ document.addEventListener("DOMContentLoaded", () => {
     saveQuantity = null;
   }
   if (!saveQuantity) {
-    Storage = saveQuantity;
     // TODO: Check if `.items-quantity` element exists before setting its `textContent`.
     let itemsQuantityElement = document.querySelector(".items-quantity");
     if (itemsQuantityElement) {
-      itemsQuantityElement.textContent = Storage;
+      itemsQuantityElement.textContent = saveQuantity;
     }
   }
   // ! update the quantity on every reload.
