@@ -1,3 +1,4 @@
+// import { Cart } from "./cart-oop.js";
 import {
   cart,
   removeItem,
@@ -10,11 +11,11 @@ import { deliveryOptions } from "./deliveryOptions.js";
 import { formatCurrency } from "./money.js";
 import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
 let cartHTML = "";
-
+// const CartItems = new Cart("normalCart");
+// let Items = CartItems.cartItems;
 export function renderCheckout() {
   cart.forEach((item) => {
     const productId = item.id;
-
     let matchingProduct;
 
     products.forEach((product) => {
@@ -50,7 +51,7 @@ export function renderCheckout() {
            ${matchingProduct.name}
          </div>
          <div class="product-price">
-          $${formatCurrency(matchingProduct.priceCents)}
+          $${matchingProduct.getPrice()}
          </div>
          <div class="product-quantity">
            <span>
@@ -138,7 +139,6 @@ export function renderCheckout() {
       const productId = link.dataset.productId;
       let Item = document.querySelector(`.js-remove-${productId}`);
       Item.classList.add("is-editing-quantity");
-      console.log(Item);
     });
   });
 

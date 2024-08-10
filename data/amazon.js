@@ -1,7 +1,8 @@
+// ! import { Cart } from "./cart-oop.js";
 import { addItem } from "./cart.js";
-//import {cartItems} from './checkout.js';
 import { products } from "./products.js";
-
+//TODO:Importing the cart from a file and need to assign it a variable to access that.
+// !const cartItems = new Cart("normalCart");
 // Generate HTML for products
 let html = "";
 products.forEach((product) => {
@@ -17,7 +18,7 @@ products.forEach((product) => {
 
           <div class="product-rating-container">
             <img class="product-rating-stars"
-              src="images/ratings/rating-${product.rating.stars * 10}.png">
+              src="${product.getRatingStars()}">
             <div class="product-rating-count link-primary">
               ${product.rating.count}
             </div>
@@ -61,6 +62,7 @@ document.querySelector(".products-grid").innerHTML = html;
 document.querySelectorAll(".js-add-to-cart").forEach((button) => {
   button.addEventListener("click", () => {
     const ID = button.dataset.productId;
+    //TODO:Accessing the addTOcart method from the Cart class , that's been imported.
     addItem(ID);
     setTime(ID);
   });

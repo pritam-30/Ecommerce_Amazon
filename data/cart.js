@@ -149,7 +149,7 @@ export function cartQuantity(productId) {
   updateQuantity();
   saveCart();
 }
-//TODO: Update the cart
+// TODO: Update the cart
 export function updateDeliveryOptions(productId, deliveryId) {
   let matchingProduct;
   cart.forEach((item) => {

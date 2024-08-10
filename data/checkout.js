@@ -1,4 +1,4 @@
 import { renderCheckout } from "./orderSummary.js";
-import "./cart-oop.js";
+import "./cart.js";
 
 renderCheckout();
