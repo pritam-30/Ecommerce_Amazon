@@ -1,12 +1,14 @@
 // ! import { Cart } from "./cart-oop.js";
 import { addItem } from "./cart.js";
-import { products } from "./products.js";
+import { products, loadProducts } from "./products.js";
 //TODO:Importing the cart from a file and need to assign it a variable to access that.
 // !const cartItems = new Cart("normalCart");
 // Generate HTML for products
 let html = "";
-products.forEach((product) => {
-  html += `<div class="product-container">
+loadProducts(createProducts);
+function createProducts() {
+  products.forEach((product) => {
+    html += `<div class="product-container">
           <div class="product-image-container">
             <img class="product-image"
               src="${product.image}">
@@ -42,7 +44,7 @@ products.forEach((product) => {
               <option value="10">10</option>
             </select>
           </div>
-
+          ${product.extraInfo()}
           <div class="product-spacer"></div>
 
           <div class="added-to-cart-${
@@ -56,26 +58,27 @@ products.forEach((product) => {
             Add to Cart
           </button>
         </div>`;
-});
-document.querySelector(".products-grid").innerHTML = html;
-
-document.querySelectorAll(".js-add-to-cart").forEach((button) => {
-  button.addEventListener("click", () => {
-    const ID = button.dataset.productId;
-    //TODO:Accessing the addTOcart method from the Cart class , that's been imported.
-    addItem(ID);
-    setTime(ID);
   });
-});
+  document.querySelector(".products-grid").innerHTML = html;
 
-function setTime(ID) {
-  let time = setTimeout(() => {
-    document.querySelector(
-      `.added-to-cart-${ID}`
-    ).innerHTML = `<img src="images/icons/checkmark.png" width=18px>   Added`;
-    setTimeout(() => {
-      document.querySelector(`.added-to-cart-${ID}`).innerHTML = "";
-      clearTimeout(time);
-    }, 3000);
+  document.querySelectorAll(".js-add-to-cart").forEach((button) => {
+    button.addEventListener("click", () => {
+      const ID = button.dataset.productId;
+      //TODO:Accessing the addTOcart method from the Cart class , that's been imported.
+      addItem(ID);
+      setTime(ID);
+    });
   });
+
+  function setTime(ID) {
+    let time = setTimeout(() => {
+      document.querySelector(
+        `.added-to-cart-${ID}`
+      ).innerHTML = `<img src="images/icons/checkmark.png" width=18px>   Added`;
+      setTimeout(() => {
+        document.querySelector(`.added-to-cart-${ID}`).innerHTML = "";
+        clearTimeout(time);
+      }, 3000);
+    });
+  }
 }

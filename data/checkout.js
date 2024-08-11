@@ -1,4 +1,4 @@
 import { renderCheckout } from "./orderSummary.js";
 import "./cart.js";
-
-renderCheckout();
+import { loadProducts } from "./products.js";
+loadProducts(renderCheckout);
